@@ -15,4 +15,24 @@ Stack Builder Installation Directory: C:\Program Files\PostgreSQL\12
 
 __docs__
 
-wagtail deploy https://docs.wagtail.io/en/v2.8.1/advanced_topics/add_to_django_project.html
+wagtail deploy 
+
+https://docs.wagtail.io/en/v2.8.1/advanced_topics/add_to_django_project.html
+
+
+add postgres to django:
+
+https://docs.djangoproject.com/en/3.0/ref/contrib/postgres/
+
+https://www.digitalocean.com/community/tutorials/how-to-use-postgresql-with-your-django-application-on-ubuntu-14-04
+
+
+add DRF to django:
+
+https://www.django-rest-framework.org/tutorial/quickstart/
+
+about sessions:
+
+https://docs.djangoproject.com/en/3.0/topics/http/sessions/
+
+https://developer.mozilla.org/ru/docs/Learn/Server-side/Django/%D0%A1%D0%B5%D1%81%D1%81%D0%B8%D0%B8

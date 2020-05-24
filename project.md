@@ -1,5 +1,5 @@
 from sources:
-git clone https://github.com/satrum/stories-adserver.git %project_folder%
+git clone https://github.com/satrum/alerts_dashboard.git %project_folder%
 cd %project_folder%
 python3 -m venv venv
 source venv/bin/activate
@@ -10,6 +10,7 @@ setup:
 pip install django
 pip install djangorestframework
 pip install psycopg2 OR psycopg2-binary
+pip install django-debug-toolbar
 cd backend
 pip freeze > requirements.txt
 django-admin startproject project .
@@ -35,7 +36,7 @@ DATABASES = {
         'PORT': '5432',
     }
 }
-
+INTERNAL_IPS = ['127.0.0.1', 'localhost', ]
 
 
 add superuser:
