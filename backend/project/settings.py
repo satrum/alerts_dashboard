@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'dashboard',  # application
     'rest_framework',  # DRF
     'debug_toolbar',  # for show debug toolbar
+    'colorfield',  # for ColorField in models with color picker
 ]
 
 MIDDLEWARE = [

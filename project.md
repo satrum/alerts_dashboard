@@ -11,6 +11,7 @@ pip install django
 pip install djangorestframework
 pip install psycopg2 OR psycopg2-binary
 pip install django-debug-toolbar
+pip install django-colorfield
 cd backend
 pip freeze > requirements.txt
 django-admin startproject project .
@@ -20,6 +21,8 @@ python manage.py runserver 0.0.0.0:8800
 python manage.py startapp dashboard
 settings.py: INSTALLED_APPS 'dashboard'
 settings.py: INSTALLED_APPS 'rest_framework'
+settings.py: INSTALLED_APPS 'debug_toolbar'
+settings.py: INSTALLED_APPS 'colorfield'
 settings.py: ALLOWED_HOSTS = ['localhost', '127.0.0.1', '10.1.1.132']
 settings.py:
 REST_FRAMEWORK = {
@@ -44,6 +47,13 @@ python manage.py createsuperuser --email admin@localhost --username admin (passw
 
 add dashboard/urls.py
 add in project/urls.py: path('', include('dashboard.urls'))
+
+
+create repository on github (public):
+C:\Program Files\PuTTY
+C:\Program Files\Git
+git remote add origin https://github.com/satrum/alerts_dashboard.git
+git push -u origin master
 
 
 
