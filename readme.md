@@ -37,3 +37,5 @@ about sessions:
 https://docs.djangoproject.com/en/3.0/topics/http/sessions/
 
 https://developer.mozilla.org/ru/docs/Learn/Server-side/Django/%D0%A1%D0%B5%D1%81%D1%81%D0%B8%D0%B8
+
+https://data-flair.training/blogs/django-sessions/

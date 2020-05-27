@@ -7,8 +7,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import authentication, permissions
 
-from .models import Category
-from .serializers import CategorySerializer
+from .models import Category, Poll
+from .serializers import CategorySerializer, PollSerializer
 
 # Create your views here.
 
@@ -37,3 +37,10 @@ class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
     """
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+
+class PollViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    API endpoint that allows votes to be viewed or edited.
+    """
+    queryset = Poll.objects.all()
+    serializer_class = PollSerializer
