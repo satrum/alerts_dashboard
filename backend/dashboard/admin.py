@@ -22,4 +22,6 @@ class ResultsAdmin(admin.ModelAdmin):
 
 @admin.register(Session)
 class ResultsAdmin(admin.ModelAdmin):
-    list_display = ('pk', )
+    #list_display = ('pk', 'session_key', 'session_data', 'expire_date', 'get_decoded')
+    list_display = ('session_key', 'expire_date', 'get_decoded')
+

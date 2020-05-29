@@ -25,7 +25,7 @@ SECRET_KEY = 'zi0@8=6pcn3(3%0w9i1v=fm!n0sk7lvk#^xgkg+4&d)cbax6yc'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '10.1.1.132']#, '0.0.0.0']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '10.1.1.132', 'testserver']#, '0.0.0.0']
 
 
 # Application definition
@@ -137,7 +137,11 @@ STATIC_URL = '/static/'
 # DRF
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 10
+    'PAGE_SIZE': 10,
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ]
 }
 
 INTERNAL_IPS = ['127.0.0.1', 'localhost', ]  # for show debug toolbar

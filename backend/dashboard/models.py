@@ -34,6 +34,10 @@ class Sharetext(models.Model):
         return self.text
 
 class Poll(models.Model):
+    """
+    repeat = Choices (можно ли повторно проводить опрос тому же пользователю и как часто)
+
+    """
     text = models.CharField(max_length=200, unique=True, help_text='тип опроса')
     TYPE_CHOICES = [
         ('A', 'On-Off'),
@@ -65,7 +69,8 @@ class Results(models.Model):
     result = ArrayField(models.CharField(max_length=200))
     input_text = models.CharField(max_length=200, blank=True, null=True, help_text='текст со своим вариантом')
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name="user_polls")
-    session_key = models.CharField(max_length=200, help_text='request.session.session_key')
+    #session_key = models.CharField(max_length=200, help_text='request.session.session_key')
+    session_key = models.ForeignKey(Session, on_delete=models.SET_NULL, null=True, help_text='request.session.session_key')
 
     def __str__(self):
         if self.user is None:

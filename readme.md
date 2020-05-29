@@ -1,5 +1,7 @@
 __настройка postgres__
 
+
+```
 pgadmin password: Pa$$w0rd
 
 Installation Directory: C:\Program Files\PostgreSQL\12
@@ -12,6 +14,7 @@ Database Service: postgresql-x64-12
 Command Line Tools Installation Directory: C:\Program Files\PostgreSQL\12
 pgAdmin4 Installation Directory: C:\Program Files\PostgreSQL\12\pgAdmin 4
 Stack Builder Installation Directory: C:\Program Files\PostgreSQL\12
+```
 
 __docs__
 
@@ -39,3 +42,7 @@ https://docs.djangoproject.com/en/3.0/topics/http/sessions/
 https://developer.mozilla.org/ru/docs/Learn/Server-side/Django/%D0%A1%D0%B5%D1%81%D1%81%D0%B8%D0%B8
 
 https://data-flair.training/blogs/django-sessions/
+
+github:
+
+https://guides.github.com/features/mastering-markdown/
