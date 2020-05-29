@@ -18,4 +18,5 @@ urlpatterns = [
     # custom API
     path('category_list/', views.CategoriesView.as_view()),
     path('poll_list/', views.PollView.as_view()),
+    path('result_list/', views.ResultsView.as_view()),
     ]

@@ -7,14 +7,17 @@ from rest_framework import viewsets
 from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.status import HTTP_401_UNAUTHORIZED
+
 from rest_framework import authentication
 #SessionAuthentication, BasicAuthentication
+
 from rest_framework import permissions
 #IsAuthenticated, IsAdminUser
 
 
-from .models import Category, Poll
-from .serializers import CategorySerializer, PollSerializer
+from .models import Category, Poll, Results
+from .serializers import CategorySerializer, PollSerializer, ResultSerializer
 
 # Create your views here.
 
@@ -62,12 +65,14 @@ class CategoriesView(APIView):
 
     def get(self, request):
         #request.session['mydata'] = 'data'
-        if request.session.get('session_user', None) is None:
-            request.session['session_user'] = 'initialized'
+        #for k,v in request.META.items():
+        #    print(k,v)
+        if request.session.get('ip', None) is None:
+            request.session['ip'] = request.META.get('REMOTE_ADDR', None)
         print(request.session.session_key)
         categories = Category.objects.all()
         serializer = CategorySerializer(categories, many=True)
-        return Response({'categories': serializer.data, 'user': request.session.get('session_user', None)})
+        return Response({'categories': serializer.data})#, 'user': request.session.get('ip', None)})
 
     def post(self, request):
         category = request.data.get("category")
@@ -89,7 +94,32 @@ class PollView(APIView):
         serializer = PollSerializer(data=poll)
         if serializer.is_valid(raise_exception=True):
             poll_saved = serializer.save()
-        return Response({"success": "Poll '{}' created successfully".format(poll_saved.name)})
+        return Response({"success": "Poll '{}' created successfully".format(poll_saved.text)})
+
+class ResultsView(APIView):
+    """
+    1. проверить наличие session
+    2. Results.objects.filter(session_key = session_key)
+    3. Если фильтр по poll.pk то его добавить в фильтр
+    """
+
+    def get(self, request):
+        # check session_key
+        session_key = request.session.session_key
+        print(session_key)
+        if session_key is None:
+            return Response({'error': 'need sessionid in cookies'}, HTTP_401_UNAUTHORIZED)
+
+        # check poll_id
+        # results = Results.objects.all()
+        poll_id = self.request.query_params.get('poll_id', None)
+        if poll_id is not None:
+            results = Results.objects.filter(poll=poll_id, session_key=session_key)
+        else:
+            results = Results.objects.filter(session_key=session_key)
+
+        serializer = ResultSerializer(results, many=True)
+        return Response({'results': serializer.data, 'poll': poll_id, 'session_key': session_key})  # headers, status
 
 def cookie_session(request):
     request.session.set_test_cookie()
