@@ -127,7 +127,7 @@ GET http://10.1.1.132:8800/result_list/
 
 *Пройти опрос:*
 
-POST http://10.1.1.132:8800/result/
+POST http://10.1.1.132:8800/result_list/
 
 {
     "result": 
@@ -147,6 +147,7 @@ Results.create(poll_id, session_id, -user_id, result, -input_text).save()
 OK проверяется на тип опроса и соответствие Poll.options/Poll.type и Result.result
 проверяется на уникальность (был ли уже ответ, и можно ли повторить)
 проверять поле Poll.another, Poll.another_text и Result.input_text
+проверять поле Poll.state - можно создавать только если 'E' - Enabled
 !!! проверяется user_id - позже
 
 *Получить статистики:*
@@ -182,4 +183,6 @@ OK проверяется на тип опроса и соответствие P
 1. - валидация POST view.PollView (категория существует, список вариантов - непустой)
 2. авторизация по сессии, для получения и обновления Cookies
 3. !!! отдельный GET view 'create_session' возвращающий cookies с sessionid (убрать из category_list/)
-4. ->!!! POST view 'result' для создания ответа 
+4. ->!!! POST ResultsView http://10.1.1.132:8800/result_list/ для создания одного ответа 
+5. GET PollView() http://10.1.1.132:8800/poll_list/?category_id=x фильтр по категории
+6. POST ResultsView http://10.1.1.132:8800/result_list/ для создания списка ответов (Wizard mode)

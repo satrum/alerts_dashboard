@@ -14,7 +14,7 @@ class SharetextAdmin(admin.ModelAdmin):
 
 @admin.register(Poll)
 class PollAdmin(admin.ModelAdmin):
-    list_display = ('id', 'text', 'type', 'options', 'another', 'another_text', 'share_text', 'category', 'state', 'created_time', 'color')
+    list_display = ('id', 'text', 'type', 'options', 'another', 'another_text', 'share_text', 'category', 'state', 'created_time', 'color', 'repeat', 'repeat_pause')
 
 @admin.register(Results)
 class ResultsAdmin(admin.ModelAdmin):

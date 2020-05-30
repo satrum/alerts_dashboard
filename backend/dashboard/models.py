@@ -4,6 +4,7 @@ from django.utils import timezone
 from django.contrib.sessions.models import Session
 from django.contrib.auth.models import User, AnonymousUser
 from colorfield.fields import ColorField
+import datetime
 
 # Create your models here.
 class Category(models.Model):
@@ -59,6 +60,8 @@ class Poll(models.Model):
     state = models.CharField(max_length=1, choices=STATE_CHOICES, default='E', help_text='состояние')
     created_time = models.DateTimeField(default=timezone.now, help_text='Время создания опроса') # auto_now=True если нужно обновлять
     color = ColorField(default='#FF0000', help_text='Цвет блока')
+    repeat = models.BooleanField(help_text='Можно ли повторять опрос', default=False)
+    repeat_pause = models.DurationField(help_text='как часто можно повторять опрос', default=datetime.timedelta(days=1))
 
     def __str__(self):
         return self.text

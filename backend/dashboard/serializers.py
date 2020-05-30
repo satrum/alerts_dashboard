@@ -9,7 +9,7 @@ class CategorySerializer(serializers.ModelSerializer):
 class PollSerializer(serializers.ModelSerializer):
     class Meta:
         model = Poll
-        fields = ['id', 'text', 'type', 'options', 'another', 'another_text', 'share_text', 'category', 'state', 'created_time', 'color']
+        fields = ['id', 'text', 'type', 'options', 'another', 'another_text', 'share_text', 'category', 'state', 'created_time', 'color', 'repeat', 'repeat_pause']
 
 class ResultSerializer(serializers.ModelSerializer):
     class Meta:

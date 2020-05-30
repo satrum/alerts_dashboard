@@ -142,7 +142,7 @@ class ResultsView(APIView):
             print(serializer.validated_data)
             poll = Poll.objects.get(pk=result['poll'])
             print(poll.type, poll.options, result['result'])
-            check_result = False
+
             if poll.type == 'A' and poll.options != result['result']:
                 return Response({'error': 'incorrect result for poll type A'}, HTTP_400_BAD_REQUEST)
             if poll.type == 'O':
@@ -154,6 +154,8 @@ class ResultsView(APIView):
                 for item in result['result']:
                     if item not in poll.options:
                         return Response({'error': 'poll type M, need one or many results from {}'.format(','.join(poll.options))}, HTTP_400_BAD_REQUEST)
+
+            # check Poll.repeat/repeat_pause
 
             result_saved = serializer.save()
         return Response({"success": "Result '{}' created successfully".format(result_saved)})
