@@ -25,7 +25,8 @@ SECRET_KEY = 'zi0@8=6pcn3(3%0w9i1v=fm!n0sk7lvk#^xgkg+4&d)cbax6yc'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '10.1.1.132', 'testserver']#, '0.0.0.0']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '10.1.1.132', '10.1.1.128', 'testserver', '0.0.0.0']#, '0.0.0.0']
+# front 10.1.1.111
 
 
 # Application definition
@@ -41,12 +42,14 @@ INSTALLED_APPS = [
     'rest_framework',  # DRF
     'debug_toolbar',  # for show debug toolbar
     'colorfield',  # for ColorField in models with color picker
+    'corsheaders',  # django-cors-headers
 ]
 
 MIDDLEWARE = [
     'debug_toolbar.middleware.DebugToolbarMiddleware',  # for show debug toolbar
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',  # django-cors-headers
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -144,5 +147,40 @@ REST_FRAMEWORK = {
     ]
 }
 
-INTERNAL_IPS = ['127.0.0.1', 'localhost', ]  # for show debug toolbar
+INTERNAL_IPS = ['127.0.0.1', 'localhost']  # for show debug toolbar '10.1.1.128',
 SESSION_SAVE_EVERY_REQUEST = True
+
+#https://github.com/adamchainz/django-cors-headers#configuration
+
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = True
+'''
+
+CORS_ORIGIN_WHITELIST = (
+    'http://localhost:8800',
+    'http://localhost:3000',
+    'http://10.1.1.128:8800',
+    'http://10.1.1.111:3000'
+)
+'''
+
+#  If this is set to True, client-side JavaScript will not be able to access the session cookie.
+SESSION_COOKIE_HTTPONLY = False  # default=True https://docs.djangoproject.com/en/3.0/ref/settings/#std:setting-SESSION_COOKIE_HTTPONLY
+
+#SESSION_COOKIE_SAMESITE = None  # default Lax; None need SESSION_COOKIE_SECURE = True for HTTPS connection
+'''
+CORS_ORIGIN_ALLOW_ALL = False
+
+CORS_ORIGIN_WHITELIST = (
+    'http://localhost:8800',
+    'http://localhost:3000',
+    'http://10.1.1.128:8800',
+)
+'''
+
+#from corsheaders.defaults import default_headers, default_methods
+#print(default_headers)
+#print(default_methods)
+
+# https://docs.djangoproject.com/en/3.0/ref/settings/#csrf-use-sessions
+# https://docs.djangoproject.com/en/3.0/ref/csrf/#ajax

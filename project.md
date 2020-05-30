@@ -14,6 +14,7 @@ setup:
     pip install psycopg2 OR psycopg2-binary
     pip install django-debug-toolbar
     pip install django-colorfield
+    pip install django-cors-headers
     cd backend
     pip freeze > requirements.txt
     django-admin startproject project .
@@ -102,6 +103,10 @@ POST /create_Result требует наличия cookies , в таблице Re
 
 **методы дашборда**
 
+*Postman*
+https://www.getpostman.com/collections/25a4bfd3f571168e32c9
+postman/alerts_dashboard.postman_collection.json
+
 *Получение списка категорий:*
 
 GET http://10.1.1.132:8800/category_list/
@@ -113,7 +118,12 @@ GET http://10.1.1.132:8800/category_list/
 
 GET http://10.1.1.132:8800/poll_list/
 
+GET http://10.1.1.132:8800/poll_list/?limit=10&offset=0&category_id=2
+
 авторизация не нужна
+есть паджинация
+есть фильтр по категории
+
 
 *Получение списка результатов:*
 
@@ -145,7 +155,7 @@ Results.create(poll_id, session_id, -user_id, result, -input_text).save()
 ОК требуется cookies
 ОК проверяется session_id, и добавляется в Result.session_key
 OK проверяется на тип опроса и соответствие Poll.options/Poll.type и Result.result
-проверяется на уникальность (был ли уже ответ, и можно ли повторить)
+OK проверяется на уникальность (был ли уже ответ, и можно ли повторить) poll.repeat_pause, poll.repeat
 проверять поле Poll.another, Poll.another_text и Result.input_text
 проверять поле Poll.state - можно создавать только если 'E' - Enabled
 !!! проверяется user_id - позже
@@ -179,10 +189,14 @@ OK проверяется на тип опроса и соответствие P
 - промо (бренд)
 
 
+#### Сделано
+5. GET PollView() http://10.1.1.132:8800/poll_list/?category_id=x фильтр по категории
+
 #### Срочно
 1. - валидация POST view.PollView (категория существует, список вариантов - непустой)
 2. авторизация по сессии, для получения и обновления Cookies
 3. !!! отдельный GET view 'create_session' возвращающий cookies с sessionid (убрать из category_list/)
 4. ->!!! POST ResultsView http://10.1.1.132:8800/result_list/ для создания одного ответа 
-5. GET PollView() http://10.1.1.132:8800/poll_list/?category_id=x фильтр по категории
 6. POST ResultsView http://10.1.1.132:8800/result_list/ для создания списка ответов (Wizard mode)
+7. Telegram bot - использующий API для опросов
+8. Добавить логин пользователя

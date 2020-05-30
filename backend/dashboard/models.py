@@ -63,6 +63,11 @@ class Poll(models.Model):
     repeat = models.BooleanField(help_text='Можно ли повторять опрос', default=False)
     repeat_pause = models.DurationField(help_text='как часто можно повторять опрос', default=datetime.timedelta(days=1))
 
+    class Meta:
+        verbose_name = 'Опрос'
+        verbose_name_plural = 'Опросы'
+        ordering = ['pk']
+
     def __str__(self):
         return self.text
 
@@ -74,6 +79,11 @@ class Results(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name="user_polls")
     #session_key = models.CharField(max_length=200, help_text='request.session.session_key')
     session_key = models.ForeignKey(Session, on_delete=models.SET_NULL, null=True, help_text='request.session.session_key')
+
+    class Meta:
+        verbose_name = 'Результат'
+        verbose_name_plural = 'Результаты'
+        ordering = ['-created_time']
 
     def __str__(self):
         if self.user is None:

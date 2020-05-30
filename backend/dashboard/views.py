@@ -1,13 +1,18 @@
 from django.shortcuts import render, HttpResponse
+from django.http import JsonResponse
 
 from django.contrib.sessions.models import Session
+from django.contrib.sessions.apps import SessionsConfig
+from django.contrib.sessions.backends.db import SessionStore
 from django.contrib.auth.models import User
+from django.utils import timezone
 
 from rest_framework import viewsets
 from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.status import HTTP_401_UNAUTHORIZED, HTTP_400_BAD_REQUEST
+from rest_framework.status import HTTP_401_UNAUTHORIZED, HTTP_400_BAD_REQUEST, HTTP_200_OK
+from rest_framework.pagination import LimitOffsetPagination, PageNumberPagination
 
 from rest_framework import authentication
 #SessionAuthentication, BasicAuthentication
@@ -38,8 +43,22 @@ def test(request):
         context={'num_visits': num_visits, 'sessions': sessions, 'session_count': session_count},  # num_visits appended
     )
 
+def get_cookies(request):
+    print(request.COOKIES)
+    print(request.headers)
+    if request.session.session_key is None:
+        request.session['stage']='getcookie'
+    if request.session.get('ip', None) is None:
+        request.session['ip'] = request.META.get('REMOTE_ADDR', None)
 
-# API views
+    #response = HttpResponse('ok')
+    response = JsonResponse({})
+    response['Access-Control-Allow-Credentials'] = 'true'
+    response['Access-Control-Allow-Origin'] = '*'
+    print('new session key: {}'.format(request.session.session_key))
+    return response
+
+# [DEPRECATED]
 class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
     """
     API endpoint that allows votes to be viewed or edited.
@@ -47,6 +66,7 @@ class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
 
+# [DEPRECATED]
 class PollViewSet(viewsets.ReadOnlyModelViewSet):
     """
     API endpoint that allows votes to be viewed or edited.
@@ -64,14 +84,21 @@ class CategoriesView(APIView):
     #permission_classes = [permissions.IsAdminUser]
 
     def get(self, request):
+        print(request.COOKIES)
         #request.session['mydata'] = 'data'
         #for k,v in request.META.items():
         #    print(k,v)
+        print(request.headers)
         if request.session.get('ip', None) is None:
             request.session['ip'] = request.META.get('REMOTE_ADDR', None)
         print(request.session.session_key)
         categories = Category.objects.all()
         serializer = CategorySerializer(categories, many=True)
+        '''
+        res.set('Access-Control-Allow-Origin', '*')
+        res.set('Access-Control-Allow-Credentials', 'true')
+        '''
+
         return Response({'categories': serializer.data})#, 'user': request.session.get('ip', None)})
 
     def post(self, request):
@@ -84,10 +111,28 @@ class CategoriesView(APIView):
 
 class PollView(APIView):
 
+    def get(self, request, format=None):
+        print(request.COOKIES)
+        print(request.headers)
+        print(request.session.session_key)
+
+        category_id = self.request.query_params.get('category_id', None)
+        if category_id is not None:
+            polls = Poll.objects.filter(category=category_id)
+        else:
+            polls = Poll.objects.all()
+
+        #polls = Poll.objects.all()
+        paginator = LimitOffsetPagination()
+        result_page = paginator.paginate_queryset(polls, request)
+        serializer = PollSerializer(result_page, many=True, context={'request': request})
+        return Response({'polls': serializer.data}, status=HTTP_200_OK)
+    '''
     def get(self, request):
         polls = Poll.objects.all()
         serializer = PollSerializer(polls, many=True)
         return Response({'polls': serializer.data})  # headers, status
+    '''
 
     def post(self, request):
         poll = request.data.get("poll")
@@ -155,15 +200,46 @@ class ResultsView(APIView):
                     if item not in poll.options:
                         return Response({'error': 'poll type M, need one or many results from {}'.format(','.join(poll.options))}, HTTP_400_BAD_REQUEST)
 
-            # check Poll.repeat/repeat_pause
+            # check Poll.repeat/repeat_pause (get last result with Poll.)
+            old_result = Results.objects.filter(session_key=session_key, poll=result['poll']).first()
+            if old_result is not None:
+                if not poll.repeat:
+                    return Response({'error': 'cannot repeat this poll_id {}, old result_id {}'.format(poll.pk, old_result.pk)}, HTTP_400_BAD_REQUEST)
+                else:
+                    print('now:\n{} delta:{}\nold:\n{}\nrepeat after:\n{}'.format(timezone.now(),
+                                                                             poll.repeat_pause,
+                                                                             old_result.created_time,
+                                                                             old_result.created_time+poll.repeat_pause))
+                    if timezone.now() < old_result.created_time+poll.repeat_pause:
+                        return Response({'error': 'cannot repeat this poll_id {}, old result_id {}'.format(poll.pk, old_result.pk)}, HTTP_400_BAD_REQUEST)
 
+
+            #return Response("good")
             result_saved = serializer.save()
-        return Response({"success": "Result '{}' created successfully".format(result_saved)})
+            return Response({"success": "Result '{}' created successfully".format(result_saved)})
 
 def cookie_session(request):
     request.session.set_test_cookie()
     return HttpResponse(content='cookie created')
 
 
-from django.contrib.sessions.apps import SessionsConfig
-from django.contrib.sessions.backends.db import SessionStore
+class PollstatsView(APIView):
+    def get(self, request):
+
+        # check poll_id
+        poll_id = self.request.query_params.get('poll_id', None)
+        if poll_id is None:
+            return Response({'error': 'need /?poll_id=x'}, HTTP_400_BAD_REQUEST)
+        print(poll_id)
+        try:
+            poll = Poll.objects.get(pk=poll_id)
+            print(poll)
+        except Exception as e:
+            return Response({'error': 'exception: {}'.format(str(e))}, HTTP_400_BAD_REQUEST)
+
+
+        count = Results.objects.filter(poll=poll_id).count()
+        print(count)
+
+        return Response({"data": [], "count": count, "poll": poll_id}, status=HTTP_200_OK)
+

@@ -46,3 +46,7 @@ https://data-flair.training/blogs/django-sessions/
 github:
 
 https://guides.github.com/features/mastering-markdown/
+
+cors:
+
+https://github.com/adamchainz/django-cors-headers#configuration

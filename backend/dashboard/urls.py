@@ -18,8 +18,10 @@ urlpatterns = [
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('test/', views.test, name='test'),
     path('testcookie/', views.cookie_session),
+    path('getcookie/', views.get_cookies),
     # custom API
     path('category_list/', views.CategoriesView.as_view()),
     path('poll_list/', views.PollView.as_view()),
     path('result_list/', views.ResultsView.as_view()),
+    path('poll_stats/', views.PollstatsView.as_view()),
     ]
