@@ -7,7 +7,7 @@ from rest_framework import viewsets
 from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.status import HTTP_401_UNAUTHORIZED
+from rest_framework.status import HTTP_401_UNAUTHORIZED, HTTP_400_BAD_REQUEST
 
 from rest_framework import authentication
 #SessionAuthentication, BasicAuthentication
@@ -120,6 +120,43 @@ class ResultsView(APIView):
 
         serializer = ResultSerializer(results, many=True)
         return Response({'results': serializer.data, 'poll': poll_id, 'session_key': session_key})  # headers, status
+
+    def post(self, request):
+        # check "result" key
+        result = request.data.get("result", None)
+        if result is None:
+            return Response({'error': 'need result key'}, HTTP_400_BAD_REQUEST)
+
+        # check and add session_key
+        session_key = request.session.session_key
+        print(session_key)
+        if session_key is None:
+            return Response({'error': 'need sessionid in cookies'}, HTTP_401_UNAUTHORIZED)
+        result['session_key'] = session_key
+        print(result)
+
+        #validate
+        serializer = ResultSerializer(data=result)
+        if serializer.is_valid(raise_exception=True):
+            # check  Poll.options/Poll.type = Result.result
+            print(serializer.validated_data)
+            poll = Poll.objects.get(pk=result['poll'])
+            print(poll.type, poll.options, result['result'])
+            check_result = False
+            if poll.type == 'A' and poll.options != result['result']:
+                return Response({'error': 'incorrect result for poll type A'}, HTTP_400_BAD_REQUEST)
+            if poll.type == 'O':
+                if len(result['result'])!=1:
+                    return Response({'error': 'poll type O, need only 1 result from list'}, HTTP_400_BAD_REQUEST)
+                elif result['result'][0] not in poll.options:
+                    return Response({'error': 'poll type O, need result from {}'.format(','.join(poll.options))}, HTTP_400_BAD_REQUEST)
+            if poll.type == 'M':
+                for item in result['result']:
+                    if item not in poll.options:
+                        return Response({'error': 'poll type M, need one or many results from {}'.format(','.join(poll.options))}, HTTP_400_BAD_REQUEST)
+
+            result_saved = serializer.save()
+        return Response({"success": "Result '{}' created successfully".format(result_saved)})
 
 def cookie_session(request):
     request.session.set_test_cookie()

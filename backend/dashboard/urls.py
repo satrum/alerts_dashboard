@@ -10,6 +10,9 @@ router.register(r'poll', views.PollViewSet)
 #router.register(r'category_names', views.ListCategories.as_view())
 #router.register(r'category_list', views.ListCategoriesView, basename='category-list')
 
+#router_2 = routers.SimpleRouter()
+#router_2.register(r'poll_list', views.PollView, basename='result-list')
+
 urlpatterns = [
     path('', include(router.urls)),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
