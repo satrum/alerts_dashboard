@@ -238,7 +238,16 @@ class PollstatsView(APIView):
             return Response({'error': 'exception: {}'.format(str(e))}, HTTP_400_BAD_REQUEST)
 
 
+
         count = Results.objects.filter(poll=poll_id).count()
+
+        results = Results.objects.filter(poll=poll_id)
+        result_list = []
+        for result in results:
+            result_list.append({'date': result.created_time, "result_array": result.result, 'user': result.session_key.pk})
+        print(result_list)
+        #serializer = ResultSerializer(results, many=True)
+        #print(serializer.data)
         print(count)
 
         return Response({"data": [], "count": count, "poll": poll_id}, status=HTTP_200_OK)

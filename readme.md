@@ -50,3 +50,15 @@ https://guides.github.com/features/mastering-markdown/
 cors:
 
 https://github.com/adamchainz/django-cors-headers#configuration
+
+pagionation DRF:
+
+https://stackoverflow.com/questions/45670648/how-to-use-pagination-in-a-non-generic-view-viewset
+
+django dashboards:
+
+https://www.freecodecamp.org/news/how-to-create-an-analytics-dashboard-in-django-app/
+
+https://simpleisbetterthancomplex.com/tutorial/2020/01/19/how-to-use-chart-js-with-django.html
+
+https://django-plotly-dash.readthedocs.io/en/latest/installation.html

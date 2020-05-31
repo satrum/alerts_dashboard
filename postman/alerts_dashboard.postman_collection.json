@@ -1,0 +1,303 @@
+{
+	"info": {
+		"_postman_id": "82be0795-d8ba-4d9c-8e35-e71a0fe91113",
+		"name": "alerts_dashboard",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "http://127.0.0.1:8800/test/",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8800/test/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8800",
+					"path": [
+						"test",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "category",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8800/category/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8800",
+					"path": [
+						"category",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "poll",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8800/poll/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8800",
+					"path": [
+						"poll",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "category_list/",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/category_list/",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"category_list",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "category_list/ post",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"category\": {\r\n\t    \"name\": \"Путешествия\",\r\n\t    \"visible\": true\r\n\t}\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/category_list/",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"category_list",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "poll_list/",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Cookie",
+						"value": "sessionid=fi7tdbltg28kmofaoy01qso9ah4h1p4q; expires=Fri, 12 Jun 2020 20:14:05 GMT; HttpOnly; Max-Age=1209600; Path=/; SameSite=Lax",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "{{host}}/poll_list/",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"poll_list",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "poll_list/ post",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"poll\": {\r\n            \"text\": \"У меня температура\",\r\n            \"type\": \"O\",\r\n            \"options\": [\r\n                \"Ниже 36.6\",\r\n                \"Нормальная\",\r\n                \"от 36.6 до 38\",\r\n                \"от 38\"\r\n            ],\r\n            \"another\": false,\r\n            \"another_text\": false,\r\n            \"share_text\": null,\r\n            \"category\": 1,\r\n            \"state\": \"E\",\r\n            \"color\": \"#FF0000\",\r\n            \"repeat\": false,\r\n            \"repeat_pause\": \"1 00:00:00\"\r\n        }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/poll_list/",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"poll_list",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "result_list/",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Cookie",
+						"value": "{{cookie}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{host}}/result_list/",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"result_list",
+						""
+					]
+				},
+				"description": "варианты:\n\n{{host}}/result_list/?poll_id=2\n\n{{host}}/result_list/"
+			},
+			"response": []
+		},
+		{
+			"name": "result_list/ post",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Cookie",
+						"value": "{{cookie}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"result\": \r\n        {\r\n            \"poll\": 3,\r\n            \"result\": [\r\n                \"Кошка\", \"Собака\"\r\n            ],\r\n            \"input_text\": \"Не нашел среди вариантов попугая\",\r\n            \"user\": null\r\n        }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/result_list/",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"result_list",
+						""
+					]
+				},
+				"description": "варианты:\n\n{{host}}/result_list/?poll_id=2\n\n{{host}}/result_list/"
+			},
+			"response": []
+		},
+		{
+			"name": "testcookie/",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/testcookie/",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"testcookie",
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "d089372e-83f0-41f8-863c-96889fe4cef2",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "c3544a62-9d20-4576-abd4-d5a285f0b0fb",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "74f554da-17ed-4df2-acad-e7af015f3590",
+			"key": "host",
+			"value": "",
+			"type": "string",
+			"disabled": true
+		},
+		{
+			"id": "1ef1d931-da29-4273-9578-1922bf5cfd77",
+			"key": "host",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"id": "68d38f40-c5b8-4697-935e-20e24fd8f9ae",
+			"key": "cookie",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"id": "1559ddc5-2fad-4840-ac0f-1d23d6cf1479",
+			"key": "cookie",
+			"value": "",
+			"type": "string",
+			"disabled": true
+		}
+	],
+	"protocolProfileBehavior": {}
+}
