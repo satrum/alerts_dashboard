@@ -239,16 +239,30 @@ class PollstatsView(APIView):
 
 
 
-        count = Results.objects.filter(poll=poll_id).count()
+        #count = Results.objects.filter(poll=poll_id).count()
 
-        results = Results.objects.filter(poll=poll_id)
-        result_list = []
+        results = Results.objects.filter(poll=poll_id).order_by().values('id', 'result', 'created_time__date', 'session_key')
+        #print(results)
+        count = len(results)
+        #result_list = []
+        keys = poll.options
         for result in results:
-            result_list.append({'date': result.created_time, "result_array": result.result, 'user': result.session_key.pk})
-        print(result_list)
+            #print(result)
+            '''
+            result_1 = {key: 1 if key in result['result'] else 0 for key in keys}
+            result_1['date'] = result['created_time__date']
+            result_1['user'] = result['session_key'][:5]
+            result_list.append(result_1)
+            '''
+            result['user'] = result['session_key'][:5]
+            for key in keys:
+                result[key] = 1 if key in result['result'] else 0
+            del result['result']
+            del result['session_key']
+        #print(result_list)
         #serializer = ResultSerializer(results, many=True)
         #print(serializer.data)
-        print(count)
+        #print(count)
 
-        return Response({"data": [], "count": count, "poll": poll_id}, status=HTTP_200_OK)
+        return Response({"data": results, "count": count, "poll": poll_id}, status=HTTP_200_OK)
 

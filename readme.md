@@ -27,6 +27,8 @@ add postgres to django:
 
 https://docs.djangoproject.com/en/3.0/ref/contrib/postgres/
 
+https://docs.djangoproject.com/en/3.0/ref/contrib/postgres/fields/
+
 https://www.digitalocean.com/community/tutorials/how-to-use-postgresql-with-your-django-application-on-ubuntu-14-04
 
 https://docs.djangoproject.com/en/3.0/ref/contrib/postgres/fields/
@@ -62,3 +64,11 @@ https://www.freecodecamp.org/news/how-to-create-an-analytics-dashboard-in-django
 https://simpleisbetterthancomplex.com/tutorial/2020/01/19/how-to-use-chart-js-with-django.html
 
 https://django-plotly-dash.readthedocs.io/en/latest/installation.html
+
+django rus:
+
+https://django.fun/docs/django/ru/3.0/ref/models/querysets/#
+
+django orm:
+
+https://books.agiliq.com/projects/django-orm-cookbook/en/latest/index.html

@@ -200,3 +200,4 @@ OK проверяется на уникальность (был ли уже от
 6. POST ResultsView http://10.1.1.132:8800/result_list/ для создания списка ответов (Wizard mode)
 7. Telegram bot - использующий API для опросов
 8. Добавить логин пользователя
+9. Добавить в Result учетку Telegram chat_id
